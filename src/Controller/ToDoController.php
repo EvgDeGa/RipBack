@@ -3,10 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\ToDo;
+use App\Service\Normal;
+use App\Service\NormalizeService;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  *
@@ -17,13 +24,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class ToDoController extends  AbstractController
 {
 
+
     /**
      * @Route("/", name="get_todo",methods={"GET"})
      */
     public function getToDos(): Response
     {
+        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $serializer = new Serializer([new ObjectNormalizer($classMetadataFactory)]);
         $em = $this->getDoctrine()->getManager();
         $todos = $em->getRepository(ToDo::class)->findAll();
+//        $jsonContent = $serializer->serialize($todos, 'json');
         return $this->json(['data' => $todos]);
     }
 
@@ -42,7 +53,9 @@ class ToDoController extends  AbstractController
 
         $em->persist($todo);
         $em->flush();
-        return $this->json(["data" => $todo]);
+        $data = (new Normal())->normalizeByGroup($todo);
+
+        return $this->json(["data" => $data]);
     }
 
     /**

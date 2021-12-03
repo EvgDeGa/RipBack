@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20211119061430 extends AbstractMigration
+final class Version20211203094040 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -21,13 +21,11 @@ final class Version20211119061430 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE to_do (id INT AUTO_INCREMENT NOT NULL, text VARCHAR(255) NOT NULL, checked TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-//        $this->addSql('DROP TABLE todo');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-//        $this->addSql('CREATE TABLE todo (id INT AUTO_INCREMENT NOT NULL, text VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, checked TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB COMMENT = \'\' ');
         $this->addSql('DROP TABLE to_do');
     }
 }
