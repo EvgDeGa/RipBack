@@ -45,7 +45,6 @@ class ToDoController extends  AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $decodedRequest = json_decode($request->getContent());
-        print $decodedRequest->{'text'}; // 12345
 
         $todo = new ToDo();
         $todo->setText($decodedRequest->{'text'});
@@ -85,6 +84,8 @@ class ToDoController extends  AbstractController
             return new Response($this->json(['message' => "No todo found for id $id"]), 404);
         }
         $todo->setText($decodedRequest->{'text'});
+        $todo->setChecked($decodedRequest->{'checked'});
+
 
         $entityManager->flush();
         return $this->json(['message' => "todo successfully updated", 'data' => $todo]);
